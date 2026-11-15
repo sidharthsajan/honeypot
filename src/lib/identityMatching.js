@@ -30,7 +30,7 @@ export async function describeFace(input) {
 export async function describeAllFaces(video) {
   await loadFaceModels()
   const rs = await faceapi.detectAllFaces(video, opts()).withFaceLandmarks().withFaceDescriptors()
-  return rs.map((r) => ({ descriptor: r.descriptor, area: r.detection.box.width * r.detection.box.height }))
+  return rs.map((r) => ({ descriptor: r.descriptor, box: r.detection.box, area: r.detection.box.width * r.detection.box.height }))
 }
 
 export function distance(a, b) {

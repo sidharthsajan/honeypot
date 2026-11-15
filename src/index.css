@@ -131,3 +131,11 @@ select { background: #fff; color: #000; border: 3px solid #000; border-radius: 1
 .modal-back { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.75); display: flex; align-items: flex-start; justify-content: center; overflow: auto; padding: 24px 12px; }
 .modal { width: min(460px, 100%); box-shadow: 8px 8px 0 var(--green); }
 .slot { border-top: 3px dashed #333; padding-top: 12px; margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+details summary { cursor: pointer; margin: 4px 0; }
+code { background: #000; padding: 1px 5px; border-radius: 4px; color: var(--green); }
+input[type=email], input[type=tel] { background: #fff; border: 3px solid #000; color: #000; padding: 9px 10px; border-radius: 10px; font: 700 14px var(--sans); }
+.modal .stack input:not([type]) { width: 100%; }
+.modal { max-height: none; }
+.chips { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+.chips li { font: 900 12px var(--mono); padding: 3px 9px; border: 3px solid #000; border-radius: 999px; color: #000; background: var(--amber); }
+.chips li.safe { background: var(--green); } .chips li.danger { background: var(--red); color: #fff; }

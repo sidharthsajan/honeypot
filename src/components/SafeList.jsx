@@ -2,7 +2,7 @@ import StatusBadge from './StatusBadge'
 import EnrolForm from './EnrolForm'
 import { OTHER_RELATIONSHIPS, REL_LABEL, sortPeople } from '../lib/people'
 
-export default function SafeList({ people, onAdd, onRemove, rec, cameraRunning, videoRef, onOpenSettings, matchThreshold }) {
+export default function SafeList({ people, onAdd, onRemove, rec, cameraRunning, videoRef, onOpenSettings, matchThreshold, presentIds = [] }) {
   return (
     <section className="panel">
       <div className="panel-head">
@@ -15,7 +15,7 @@ export default function SafeList({ people, onAdd, onRemove, rec, cameraRunning, 
       ) : (
         <ul className="people">
           {sortPeople(people).map((p) => {
-            const here = rec.person?.id === p.id
+            const here = presentIds.includes(p.id)
             return (
               <li key={p.id} className={here ? 'here' : ''}>
                 <div>

@@ -1,11 +1,12 @@
 import EnrolForm from './EnrolForm'
+import AlertSettings from './AlertSettings'
 
 const SLOTS = [
   ['self', 'YOU', 'Register yourself — the main person everyone else is related to.', 'Your name'],
   ['partner', 'YOUR PARTNER', 'Register your partner.', "Partner's name"],
 ]
 
-export default function SettingsModal({ onClose, people, onAdd, onRemove, cameraRunning, videoRef, matchThreshold, onMatchThreshold }) {
+export default function SettingsModal({ onClose, people, onAdd, onRemove, cameraRunning, videoRef, matchThreshold, onMatchThreshold, alerts, onAlertsChange }) {
   return (
     <div className="modal-back" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal panel" role="dialog" aria-modal="true" aria-label="Settings">
@@ -33,6 +34,8 @@ export default function SettingsModal({ onClose, people, onAdd, onRemove, camera
             </div>
           )
         })}
+
+        <AlertSettings alerts={alerts} onChange={onAlertsChange} />
 
         <div className="slot">
           <label className="field">

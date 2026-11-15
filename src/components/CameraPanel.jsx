@@ -27,7 +27,7 @@ export default function CameraPanel({ camera, canvasRef, tracker, threat, tone, 
           <div className="stage-note mono bad">FACE DETECTION FAILED. REFRESH.</div>
         )}
         {running && tracker.faces > 1 && (
-          <div className="stage-note mono">{tracker.faces} FACES?? SCORING THE BIGGEST FACE</div>
+          <div className="stage-note mono">{tracker.faces} FACES — SCORING EVERYONE</div>
         )}
       </div>
 

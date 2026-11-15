@@ -1,9 +1,10 @@
-export default function IncidentConsole({ log, incident, onReset }) {
+export default function IncidentConsole({ log, incident, onReset, alertLine }) {
   return (
     <section className="panel console">
       <div className="console-actions">
         <button className="btn" onClick={onReset} disabled={!incident}>DISMISS</button>
         <p className="note mono">Alert fires when someone NOT on the safe list scores above your alert limit.</p>
+        <p className="note mono">📨 {alertLine}</p>
       </div>
 
       <div className="console-cols">

@@ -1,12 +1,13 @@
 import { LABELS, WEIGHTS } from '../lib/mogScore'
 
-export default function MogScorePanel({ mog, threshold, onThreshold, faceDetected, running }) {
+export default function MogScorePanel({ mog, threshold, onThreshold, faceDetected, running, onlySafe, chips = [] }) {
   const available = mog?.available
   const over = available && mog.score >= threshold
   return (
     <section className="panel">
       <div className="panel-head"><h2 className="mono">MOG-O-METER 🟩</h2></div>
 
+      <div className="mono tiny dim" style={{ marginBottom: 4 }}>SCORING: STRANGERS ONLY (HIGHEST SCORE)</div>
       <div className={`score ${over ? 'over' : ''}`}>
         {available ? (
           <>
@@ -15,10 +16,20 @@ export default function MogScorePanel({ mog, threshold, onThreshold, faceDetecte
           </>
         ) : (
           <span className="score-na mono">
-            {!running ? 'NO CAMERA, NO MOG' : !faceDetected ? 'NO FACE, NO MOG' : `Score unavailable — ${mog?.reason?.toLowerCase() || 'reposition toward camera'}`}
+            {!running ? 'NO CAMERA, NO MOG' : !faceDetected ? 'NO FACE, NO MOG' : onlySafe ? 'ONLY SAFE PEOPLE ON SCREEN' : `Score unavailable — ${mog?.reason?.toLowerCase() || 'reposition toward camera'}`}
           </span>
         )}
       </div>
+
+      {chips.length > 0 && (
+        <ul className="chips">
+          {chips.map((c, i) => (
+            <li key={i} className={c.safe ? 'safe' : c.score != null && c.score >= threshold ? 'danger' : 'stranger'}>
+              {c.name} {c.score != null ? c.score.toFixed(1) : '—'}
+            </li>
+          ))}
+        </ul>
+      )}
 
       <label className="field">
         <span className="mono tiny dim">ALERT LIMIT (STRANGERS ABOVE THIS = HONEYPOT): {threshold.toFixed(1)}</span>

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { describeAllFaces, distance, loadFaceModels } from '../lib/identityMatching'
 
 const HOLD_MS = 1500 // keep a match briefly through single missed frames
-const EMPTY = { matched: false, person: null, distance: null }
+const EMPTY = { matched: false, person: null, distance: null, faceList: [], ticked: false }
+const FACE_HOLD_MS = 2000 // a recognised face keeps its identity through brief missed matches
 
 // Compares the most prominent live face to every registered person (~3x/sec).
 export function useFaceRecognition({ videoRef, active, people, threshold }) {
@@ -25,10 +26,12 @@ export function useFaceRecognition({ videoRef, active, people, threshold }) {
     let timer
     let lastMatch = 0
     let lastPerson = null
+    const tracks = []
     const tick = async () => {
       const video = videoRef.current
       const { people: list, threshold: th } = cfg.current
-      let best = null // { person, dist }
+      let best = null // { person, dist } for the most prominent face
+      let faceList = []
       if (video && video.readyState >= 2 && list.length) {
         try {
           const faces = await describeAllFaces(video)
@@ -39,12 +42,36 @@ export function useFaceRecognition({ videoRef, active, people, threshold }) {
               if (!best || dist < best.dist) best = { person, dist }
             }
             if (best.dist <= th) { lastMatch = performance.now(); lastPerson = best.person }
+            // Every face on screen: who is it (or nobody)?
+            const vw = video.videoWidth, vh = video.videoHeight
+            const nowMs = performance.now()
+            const next = []
+            faceList = faces.map((f) => {
+              let nearest = null
+              for (const person of list) {
+                const dist = distance(f.descriptor, person.descriptor)
+                if (!nearest || dist < nearest.dist) nearest = { person, dist }
+              }
+              const cx = (f.box.x + f.box.width / 2) / vw, cy = (f.box.y + f.box.height / 2) / vh
+              let person = nearest && nearest.dist <= th ? nearest.person : null
+              let at = person ? nowMs : 0
+              if (!person) {
+                let tr = null, bd = 0.15
+                for (const t of tracks) { const d = Math.hypot(t.cx - cx, t.cy - cy); if (d < bd) { bd = d; tr = t } }
+                if (tr?.person && nowMs - tr.at < FACE_HOLD_MS) { person = tr.person; at = tr.at }
+              }
+              next.push({ cx, cy, person, at })
+              return { cx, cy, person }
+            })
+            tracks.splice(0, tracks.length, ...next)
+          } else {
+            tracks.length = 0
           }
         } catch { /* skip frame */ }
       }
       if (stop) return
       const matched = best !== null && performance.now() - lastMatch < HOLD_MS
-      setOut({ matched, person: matched ? lastPerson : null, distance: best ? best.dist : null })
+      setOut({ matched, person: matched ? lastPerson : null, distance: best ? best.dist : null, faceList, ticked: true })
       timer = setTimeout(tick, 350)
     }
     tick()
