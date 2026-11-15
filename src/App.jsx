@@ -95,10 +95,15 @@ export default function App() {
     message: `Honeypot.exe: ${selfName} was on camera with an unrecognised person (MOG ${Math.max(...honeypots.map((h) => h.mog.score), 0).toFixed(1)}) at ${new Date().toLocaleString()}.`,
     onEvent: addLog,
   })
-  const alertLine = !alerts.enabled ? 'Partner alerts are off (Settings).'
-    : alertStatus.phase === 'confirming' ? 'You + a honeypot spotted together… confirming.'
-    : alertStatus.phase === 'open' ? `Incident open${alertStatus.lastSentAt ? ` — partner texted at ${new Date(alertStatus.lastSentAt).toLocaleTimeString()}` : ''}. No repeat messages until it closes.`
-    : 'Partner alerts armed.'
+  const hasSelf = people.some((p) => p.relationship === 'self')
+  const alertLine = !alerts.enabled ? 'Partner alerts are OFF — tick "Send alerts to my partner" in Settings.'
+    : !hasSelf ? 'Register yourself as "You" in Settings so alerts can recognise you.'
+    : !running ? 'Partner alerts armed (camera off).'
+    : alertStatus.phase === 'confirming' ? 'You + a honeypot spotted together… confirming (3s).'
+    : alertStatus.phase === 'open' ? `Incident open${alertStatus.lastSentAt ? ` — partner messaged at ${new Date(alertStatus.lastSentAt).toLocaleTimeString()}` : ''}. No repeat messages until it closes.`
+    : !selfHere ? 'Armed — but I can’t see YOU (not recognised on camera).'
+    : honeypots.length === 0 ? 'Armed — you’re visible, no honeypot above the limit.'
+    : 'Armed.'
 
   // Log status changes
   const lastKey = useRef(null)
