@@ -37,7 +37,7 @@ export function usePartnerAlerts({ together, alerts, message, onEvent }) {
             emit(`Incident opened — message held back (cooldown, ${Math.ceil((cooldownMs - (now - lastSent)) / 60000)} min left)`, 'unknown')
             setStatus((p) => ({ ...p, phase: 'open' }))
           } else if (!deliveryReady(a).any) {
-            emit('Incident opened — no delivery method set up in Settings', 'unknown')
+            emit('Incident opened — no partner Discord ID set in Settings', 'unknown')
             setStatus((p) => ({ ...p, phase: 'open' }))
           } else if (!s.sending) {
             s.sending = true
@@ -70,5 +70,12 @@ export function usePartnerAlerts({ together, alerts, message, onEvent }) {
     return () => clearInterval(id)
   }, [])
 
-  return status
+  const resetCooldown = () => {
+    try { localStorage.removeItem(LAST_SENT_KEY) } catch { /* ignore */ }
+    m.current.open = false // let a current togetherness open a fresh incident right away
+    m.current.since = null
+    setStatus((p) => ({ ...p, lastSentAt: 0 }))
+  }
+
+  return { ...status, resetCooldown }
 }

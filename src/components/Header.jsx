@@ -12,7 +12,7 @@ export default function Header({ online }) {
       <header className="header">
         <div>
           <h1 className="logo">HONEYPOT<span>.EXE</span></h1>
-          <p className="sub">ACCELERATED RELATIONSHIP COMPUTING · POWERED BY JENSEN 🧥</p>
+          <p className="sub">HONEYPOT DETECTOR — SO OUR STOCKS STAY HIGH 📈</p>
         </div>
         <div className="header-right">
           <StatusBadge tone={online ? 'trusted' : 'idle'} big>{online ? 'CAMERA: ON 🟩' : 'CAMERA: OFF 😴'}</StatusBadge>

@@ -38,7 +38,7 @@ export default function App() {
   })
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [alerts, setAlerts] = useState(() => ({
-    enabled: false, email: '', phone: '', serviceId: '', templateId: '', publicKey: '', webhookUrl: '', cooldownMin: 10, discordBot: false, discordId: '',
+    enabled: false, discordId: '', cooldownMin: 10,
     ...load('hp.alerts', {}),
   }))
   const [matchThreshold, setMatchThreshold] = useState(() => load('hp.matchThreshold', 0.5))
@@ -178,6 +178,8 @@ export default function App() {
           onMatchThreshold={setMatchThreshold}
           alerts={alerts}
           onAlertsChange={setAlerts}
+          lastSentAt={alertStatus.lastSentAt}
+          onResetCooldown={alertStatus.resetCooldown}
         />
       )}
       <IncidentConsole log={log} incident={incident} onReset={reset} alertLine={alertLine} />

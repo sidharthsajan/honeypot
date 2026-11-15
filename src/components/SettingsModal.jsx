@@ -6,7 +6,7 @@ const SLOTS = [
   ['partner', 'YOUR PARTNER', 'Register your partner.', "Partner's name"],
 ]
 
-export default function SettingsModal({ onClose, people, onAdd, onRemove, cameraRunning, videoRef, matchThreshold, onMatchThreshold, alerts, onAlertsChange }) {
+export default function SettingsModal({ onClose, people, onAdd, onRemove, cameraRunning, videoRef, matchThreshold, onMatchThreshold, alerts, onAlertsChange, lastSentAt, onResetCooldown }) {
   return (
     <div className="modal-back" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal panel" role="dialog" aria-modal="true" aria-label="Settings">
@@ -35,7 +35,7 @@ export default function SettingsModal({ onClose, people, onAdd, onRemove, camera
           )
         })}
 
-        <AlertSettings alerts={alerts} onChange={onAlertsChange} />
+        <AlertSettings alerts={alerts} onChange={onAlertsChange} lastSentAt={lastSentAt} onResetCooldown={onResetCooldown} />
 
         <div className="slot">
           <label className="field">
