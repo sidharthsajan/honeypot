@@ -32,6 +32,12 @@ export default function AlertSettings({ alerts, onChange }) {
         <input type="checkbox" checked={!!alerts.discordBot} onChange={set('discordBot')} />
         <span>Send via Discord bot DM (works on the deployed site; needs the bot set up in Vercel)</span>
       </label>
+      {alerts.discordBot && (
+        <label className="field"><span className="mono tiny dim">PARTNER DISCORD USER ID</span>
+          <input value={alerts.discordId || ''} onChange={set('discordId')} placeholder="e.g. 123456789012345678" inputMode="numeric" />
+          <span className="note">Discord → Settings → Advanced → Developer Mode, then right-click your partner → Copy User ID. They must share a server with the bot and allow DMs.</span>
+        </label>
+      )}
       <label className="field"><span className="mono tiny dim">PARTNER EMAIL</span>
         <input type="email" value={alerts.email} onChange={set('email')} placeholder="partner@example.com" />
       </label>

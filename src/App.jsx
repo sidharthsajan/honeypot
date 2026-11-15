@@ -38,7 +38,7 @@ export default function App() {
   })
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [alerts, setAlerts] = useState(() => ({
-    enabled: false, email: '', phone: '', serviceId: '', templateId: '', publicKey: '', webhookUrl: '', cooldownMin: 10, discordBot: false,
+    enabled: false, email: '', phone: '', serviceId: '', templateId: '', publicKey: '', webhookUrl: '', cooldownMin: 10, discordBot: false, discordId: '',
     ...load('hp.alerts', {}),
   }))
   const [matchThreshold, setMatchThreshold] = useState(() => load('hp.matchThreshold', 0.5))

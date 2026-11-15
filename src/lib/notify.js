@@ -34,7 +34,7 @@ export async function sendPartnerAlert(a, message) {
     const res = await fetch('/api/send-discord', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, discordId: (a.discordId || '').trim() }),
     })
     if (!res.ok) throw new Error(`Discord failed (${res.status}): ${(await res.text()).slice(0, 120)}`)
     results.push('discord')
